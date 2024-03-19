@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title of the page -->
+    <title>Android Performance Data</title>
+    <style type="text/css">
+      body {
+        background: linear-gradient(#0A0011, #0C0B1F, #101628, #151D2F, #11182A, #150D21, #0A0011);
+        color: rgb(237,237,237);
+      }
+      header {
+        font-size: 32px;
+        text-align: center;
+        padding-top: 20px;
+      }
+      .container {
+        margin: 20px;
+      }
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{{ static_root }}/js/lightbox-plus-jquery.min.js"></script>
+  </head>
+  <body>
+    <!-- content here -->
+    <header>
+      <span>{% if current_lang == "cn" %}Android性能数据{% else %}Android performance data{% endif %}</span>
+    </header>
+
+    <div class="container">
+      <div class="col-sm-12">
+        {% extends "report_charts.html" %}
+      </div>
+    </div>
+  </body>
+</html>

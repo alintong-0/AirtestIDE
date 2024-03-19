@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="42px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>设备总数</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设备总数">
+            <rect id="Rectangle-5" x="0" y="0" width="42" height="42"></rect>
+            <g id="shuliangtongji" transform="translate(1.000000, 1.000000)">
+                <path d="M37.47851,21.260745 C37.47851,31.5893109 29.0633352,40 18.7292607,40 C8.39518626,40 0,31.569333 0,21.260745 C0,10.9521569 8.41517479,2.52148997 18.7492493,2.52148997 L18.7492493,21.260745 L37.47851,21.260745 L37.47851,21.260745 Z" id="Shape" fill="#9FC2F8"></path>
+                <path d="M40,18.7965616 L21.2034384,18.7965616 L21.2034384,0 C31.5635901,0 40,8.43640985 40,18.7965616 Z" id="Shape" fill="#5B99E0"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="42px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>并行式</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="并行式">
+            <rect id="Rectangle-5" x="0" y="0" width="42" height="42"></rect>
+            <path d="M21,1 C9.9596603,1 1,9.9596603 1,21 C1,32.0403397 9.9596603,41 21,41 C32.0403397,41 41,32.0403397 41,21 C41,9.9596603 32.0403397,1 21,1 L21,1 Z M27.1995754,12.8046709 L23.0169851,16.9660297 L25.0339703,18.9830149 L29.2165605,14.8004246 L32.507431,18.1125265 L32.507431,9.492569 L23.8874735,9.492569 L27.1995754,12.8046709 Z M21.5732484,19.5562633 L9.492569,19.5562633 L9.492569,22.4437367 L20.4267516,22.4437367 L27.1995754,29.1953291 L23.8874735,32.507431 L32.507431,32.507431 L32.507431,23.866242 L29.2165605,27.1783439 L21.5732484,19.5562633 Z" id="Combined-Shape" fill="#9FC2F8"></path>
+        </g>
+    </g>
+</svg>

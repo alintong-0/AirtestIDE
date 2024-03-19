@@ -1,0 +1,256 @@
+<style type="text/css">
+  .performance-plugin {
+    padding-right: 0px;
+    padding-left: 0px;
+    font-size: 16px;
+    color: rgba(0,0,0,.65);
+    margin-bottom: 50px;
+    min-height: 1px;
+  }
+  .report-card-head {
+    background-color: #16223e;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 24px;
+    border-radius: 2px 2px 0 0;
+    zoom: 1;
+    margin-bottom: -1px;
+    min-height: 48px;
+  }
+  .performance-item-data-title {
+      font-size: 1.17em;
+      padding-left: 8px;
+      border-left: 2px solid #ccc;
+      margin: 10px;
+  }
+  .performance-item-data-detail {
+    font-size: 1.17em;
+    padding-left: 20px;
+  }
+  .report-card-body {
+      background-color: #121c34;
+  }
+
+  /* add css */
+  :root{
+      --card-back-color: #121c34;
+      --card-fore-color: #ededed;
+      --card-border-color: #ddd;
+      --universal-border-radius: 0.125rem;
+      --universal-margin: 0.5rem;
+      --universal-padding: 0.5rem;
+  }
+  .performance-plugin .row {
+    box-sizing: border-box;
+    display: flex;
+    flex: 0 1 auto;
+    flex-flow: row wrap;
+  }
+  .performance-data-container {
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+  .col-md-4, .row.cols-md-4 > * {
+    max-width: 33.33333%;
+    flex-basis: 33.33333%;
+  }
+  .col-md-2,
+  .row.cols-md-2 > * {
+    max-width: 12.5%;
+    flex-basis: 12.5%;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: center;
+    position: relative;
+    width: 100%;
+    background: var(--card-back-color);
+    color: var(--card-fore-color);
+    /*border: 0.0625rem solid var(--card-border-color);*/
+    border-radius: var(--universal-border-radius);
+    margin-top: var(--universal-margin);
+    margin-bottom: var(--universal-margin);
+    overflow: hidden;
+  }
+  .card > .section {
+    /*background: var(--card-back-color);*/
+    color: var(--card-fore-color);
+    box-sizing: border-box;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    /*border-bottom: 0.0625rem solid var(--card-border-color);*/
+    padding: var(--universal-padding);
+    width: 100%;
+  }
+  .card > .section:last-child {
+    border-bottom: 0;
+  }
+  .report-card {
+      margin-bottom: 20px;
+  }
+  .imageList{
+    overflow-x: auto;
+    overflow-y: hidden;
+    height:290px;
+    white-space: nowrap;
+    text-align:center;
+    margin:30px;
+    display: flex;
+  }
+ .hightlight{
+    width:100px;
+    margin-right:10px;
+    border: 5px solid;
+    border-radius:3px;
+    border-color:green;
+    margin-right:15px;
+  }
+  .small{
+    width:100px;
+    margin-right:15px;
+  }
+  .imageList::-webkit-scrollbar {
+    width: 10px; /*对垂直流动条有效*/
+    height: 10px; /*对水平流动条有效*/
+  }
+  /*定义滚动条的轨道颜色、内阴影及圆角*/
+  .imageList::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: darkblue;
+    border-radius: 3px;
+  }
+  /*定义滑块颜色、内阴影及圆角*/
+  .imageList::-webkit-scrollbar-thumb{
+      border-radius: 7px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+      background-color: #E8E8E8;
+  }
+
+</style>
+<link href="{{ static_root }}/css/lightbox.min.css" rel="stylesheet" />
+<div class="container-fluid performance-plugin">
+    {% for serialno, avg_data in average_data.items() %}
+    <div id="performance_data_{{ serialno }}" class="performance-data-container">
+        <div id="averagePfm">
+        <div class="card fluid report-card material">
+            <div class="doc section report-card-head">
+                {% if serialno in show_names %}
+                <h3 class="">{{ show_names[serialno]["serialno"] }}</h3>
+                <h4>{% if current_lang == "cn" %}平均性能{% else %}Average performance data{% endif %} {{ show_names[serialno]["time_package"] }}</h4>
+                {% else %}
+                <h3>{{ serialno }}</h3>
+                <h4>{% if current_lang == "cn" %}平均性能{% else %}Average performance data{% endif %}</h4>
+                {% endif %}
+            </div>
+            <div class="row section report-card-body">
+                <div class="col-md-2">
+                  <h3 class="doc performance-item-data-title avgLabel" data-labelType="cpu">CPU usage (%)</h3>
+                  <p class="doc performance-item-data-detail">{{ avg_data["cpu"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="pss">Memory usage (M)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["pss"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="fps">FPS(Hz)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["fps"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="ftime">FTime(ms)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["ftime"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="jank">Jank(Times)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["jank"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="bigjank">FTime(Times)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["bigjank"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="net_flow">Network traffic (KB/s)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["net_flow"] }}</p>
+                  </div>
+                  <div class="col-md-2">
+                      <h3 class="doc performance-item-data-title avgLabel" data-labelType="battery_temperature">Battery temperature (°C)</h3>
+                      <p class="doc performance-item-data-detail">{{ avg_data["battery_temperature"] }}</p>
+                  </div>
+            </div>
+        </div>
+        </div><!-- /# averagePfm -->
+
+        <div class="row-fluid wrap">
+            <div id="charts_main_{{ serialno }}" class="charts_main span12" style="height:500px; width: 100%"></div>
+        </div>
+    </div><!-- /# serialno data-->
+
+    {% if show_img[serialno]%}
+    <div id="imageList{{serialno}}" class="imageList">
+      {% for time,screen in screen_data[serialno].items() %}
+     
+        <a href="{{screen["src"]}}" data-lightbox="imageList{{serialno}}" data-title="{{time}}" style="text-decoration:none;color:#FFFFFF;">
+        
+            <img  index="{{screen["index"]}}" id="{{screen["time"]}}" class="small" src="{{screen["src"]}}"/>
+           <br>{{time}}<br>FPS:{{screen["fps"]}}<br>Mem:{{screen["pss"]}}<br>Jank:{{screen["jank"]}}
+        </a>
+
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+<script src="{{ static_root }}/js/echarts/echarts.min.js"></script>
+<script src="{{ static_root }}/js/echarts/dark.js" charset="utf-8"></script>
+<script src="{{ static_root }}/js/reportCharts.js" charset="utf-8"></script>
+
+<script type="text/javascript" charset="utf-8">
+function changeAvgLang(currentLang) {
+    if (currentLang == "cn") {
+        Array.prototype.forEach.call(document.getElementsByClassName("avgLabel"), function (el) {
+            el.innerHTML = nameInfo[el.dataset.labeltype]["name_cn"];
+        })
+    }
+}
+var last_img = {}; //记录报告中，上一次点击的是哪一张图片，用于取消高亮
+var pfm_data = '{{ pfm_data }}';
+var mark_area = {{mark_area}} //获取标记的区域
+pfm_data = JSON.parse(pfm_data);
+var current_lang = "{{ current_lang }}";
+var myChart = {} // 会有很多个图表，不同图表的点击事件不一样
+for (const key in pfm_data) {
+    myChart[key] = echarts.init(document.getElementById('charts_main_' + key), "dark");
+    var opt = JSON.parse(JSON.stringify(localOption));
+    loadDataFromJson(pfm_data[key], opt);
+    makeMarkarea(mark_area,opt) //生成标记区域
+    opt.title.text = key;
+    changeChartsLang(current_lang, opt);
+
+    //这里实现点击联动功能
+    myChart[key].getZr().on('click', function (params) { 
+      var op=myChart[key].getOption(); //获取点击的图表的设置
+      var test_div = null 
+      var val = parseInt(op.xAxis[0].axisPointer.value) //获取点击的位置（就是X轴坐标）
+      var vi = 0
+      do{
+        var test_div = document.getElementById(val); //根据点击的位置，获取对应图片的元素，该元素已设定ID属性为X轴坐标
+        val--;
+        vi++;
+        if(vi>10000) //由于点击的位置可能并没有图片元素（主要用于适配帧时间那个series），所以往前找
+          return //找不到就算了（防止数据为空时，会卡死，一般不会间隔超过10s记录一次）
+      }while(test_div==null);
+      
+      var index = parseInt(test_div.getAttribute("index")) //index参数记录了图片的位置，用于滚动条滚动
+      if(last_img[key]!=undefined)
+        last_img[key].setAttribute("class", "small") //把上一次高亮的图片复原
+
+      test_div.setAttribute("class", "hightlight") //高亮图片
+      last_img[key]=test_div 
+      test_div = document.getElementById("imageList"+key); //获取对应的滚动条
+      test_div.scrollLeft = 115 * index - document.body.clientWidth/2; //滚动到中间
+	  });
+    myChart[key].setOption(opt);
+}
+changeAvgLang(current_lang);
+</script>

@@ -1,0 +1,226 @@
+<!--
+ * @Description: 
+ * @Author: Era Chen
+ * @Email: chenjiyun@corp.netease.com
+ * @Date: 2019-08-02 10:42:06
+ * @LastEditors: Era Chen
+ * @LastEditTime: 2019-11-13 18:53:09
+ -->
+<!--
+Author:
+    chenjiyun@corp.netease.com
+Description:
+    多设备运行的报告模板
+Date:
+    2019/4/10
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <title>{{"Airtest 多设备 多脚本 总览报告" if data['lang']=='zh' else "Airtest summary report for multi devices multi scripts"}}</title>
+    <script src="static/js/jquery-1.10.2.min.js" charset="utf-8" type="text/javascript"></script>
+    <script src="static/js/jquery-lang.js" charset="utf-8" type="text/javascript"></script>
+    <script src="static/js/zh_CN.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/javascript">
+      original_data = {{jsonData|safe}}
+      lang = new Lang();
+      lang.init({
+        defaultLang: 'en',
+        currentLang: '{{ data.lang }}'
+      });
+    </script>
+  </head>
+  <link href="static/css/multi.css" rel="stylesheet">
+  <body>
+    <div class="container">
+      <div class="nav-container">
+        <div id="nav"></div>
+      </div>
+      <div class="content">
+        <div class="page" id='overview' lang="en">
+          <div class="page-content">
+            <div class="part part1">
+              <div class="total num">
+                <img src="static/image/total.svg" alt="total">
+                <div class="info-content">
+                  <div class='info-value'>{{data.amount}}</div>
+                  <div class='info-desc'>
+                    <span lang="en">Tests</span>
+                  </div>
+                </div>
+              </div>
+              <div class="script num">
+                <img src="static/image/threshold.svg" alt="threshold">
+                <div class="info-content">
+                  <div class='info-value'>{{data.threshold or "All"}}</div>
+                  <div class='info-desc'>
+                    <span lang="en">Threshold</span>
+                  </div>
+                </div>
+              </div>
+              <div class="device num">
+                <img src="static/image/device.svg" alt="device">
+                <div class="info-content">
+                  <div class='info-value'>{{data.devices|length}}</div>
+                  <div class='info-desc'>
+                    <span lang="en">Devices</span>
+                  </div>
+                </div>
+              </div>
+              <div class="script num">
+                <img src="static/image/script.svg" alt="script">
+                <div class="info-content">
+                  <div class='info-value'>{{data.scripts|length}}</div>
+                  <div class='info-desc'>
+                    <span lang="en">Scripts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="part part2">
+              <div class="part-left">
+                <div class="duration num">
+                  <img src="static/image/duration.svg" alt="script">
+                  <div class="info-content">
+                    <div class='info-value' style="font-size:{{40 -((data.time|length)-9)*2 }}px">{{data.time}}</div>
+                    <div class='info-desc'>
+                      <div class="desc">
+                        <span lang="en">Start: </span>{{data.start}}
+                      </div>
+                      <div class="desc">
+                        <span lang="en">End: </span>{{data.end}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="run-type num">
+                  <img src="static/image/{{data.type}}.svg" alt="script">
+                  <div class="info-content">
+                    <div class='info-value'><span lang="en">{{data.task_type if data.get("task_type", "script")!="script" else data.type}}</span></div>
+                    <div class='info-desc'>
+                      <span lang="en">Ruuning type</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="part-right">
+                <div class="chart-title">
+                  <span lang="en">Test cases</span>
+                </div>
+                <canvas  id='pie'>Your browser does not support the canvas element.</canvas>
+              </div>
+            </div>
+            <div class="part part3">
+              <div class="bar">
+                <canvas  id='bar'>Your browser does not support the canvas element.</canvas>
+                <a class="more" href="#data"><span lang="en">View more</span></a>
+              </div>
+            </div>
+            <div class="part part4">
+              <div class="table">
+                <table>
+                  <thead>
+                    <th><span lang="en">Device</span></th>
+                    <th><span lang="en">Finished</span></th>
+                    <th><span lang="en">Rate</span></th>
+                    <th><span lang="en">Duration</span></th>
+                    <th><span lang="en">Operation</span></th>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page {{data.type}}" id='data'>
+          <div class="table">
+          {% if data.type=="parallel" %}
+          <div class="btns">
+            <div class="device-num"></div>
+            <div class="left btn" id='device-prev'></div>
+            <div class="right btn" id='device-right'></div>
+          </div>
+          <table>
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          {% else %}
+            <div class="table-head">
+              <div class="table-title">
+                <span lang="en">Total Records</span>
+              </div>
+              <div class="search">
+                <input type="text" class="search-query"/>
+                <img src="static/image/search.svg" class='search-icon'/>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <th><span>#</span></th>
+                <th><span lang="en" id='distribute-start' class="sort">Start time</span></th>
+                <th><span lang="en" id="distribute-script" class="sort">Script</span></th>
+                <th><span lang="en" id='distribute-device' class="sort">Device</span></th>
+                <th><span lang="en" id='distribute-duration' class="sort">Duration</span></th>
+                <th><span lang="en" id='distribute-status' class="sort">Status</span></th>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <h4 class="no-data"><span lang="en">Warning: No Records</span></h3>
+            <div id='distribute-page' class="paging"></div>
+          {% endif %}
+          </div>
+        </div>
+        <div class="page" id='detail'>
+          <div class="detail-container">
+            <div class="page-left">
+              <div class="dev-head">
+                <div class="sort" id='device-order'>
+                  <span lang="en">No</span>
+                </div>
+                <div class="sort" id='device-duration'>
+                  <span lang="en">Duration</span>
+                </div>
+                <div class="sort" id='device-status'>
+                  <span lang="en">Status</span>
+                </div>
+              </div>
+              <div id="dev-list"></div>
+            </div>
+            <div class="page-right">
+              <div class="dev-infos"></div>
+              <div class="script-head">
+                  <div class="sort" id='script-order'>
+                    <span lang="en">No</span>
+                  </div>
+                  <div class="sort" id='script-name'>
+                    <span lang="en">Name</span>
+                  </div>
+                  <div class="sort" id='script-duration'>
+                    <span lang="en">Duration</span>
+                  </div>
+                  <div class="sort" id='script-status'>
+                    <span lang="en">Status</span>
+                  </div>
+              </div>
+              <div id='script-list'></div>
+              <div id="script-page" class="paging"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <link href="static/css/monokai_sublime.min.css" rel="stylesheet">
+  <script type="text/javascript" src="static/js/highlight.min.js"></script>
+  <script type="text/javascript" src="static/js/paging.js"></script>
+  <script type="text/javascript" src="static/js/Chart.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="static/js/multi.js" charset="utf-8"></script>
+</html>
+
+
+
