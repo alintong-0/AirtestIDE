@@ -105,6 +105,7 @@ $(function() {
         newline = (typeof newline !== "undefined") ? newline : true;
         forceInsert = (typeof forceInsert !== "undefined") ? forceInsert : false;
         editorText = editor.getDoc().getValue();
+        console.log("Nemo smartAddText",content,newline,where,forceInsert,editorText)
         if (!editorText.includes(content) || forceInsert) {
             editor.removeLineError();
             if (newline) {
@@ -370,6 +371,7 @@ $(function() {
         }]
     });
     if (typeof(qt) !== "undefined") {
+        console.log("Nemo new QWebChannel")
         new QWebChannel(qt.webChannelTransport, function(channel) {
             window.qtbridge = channel.objects.qtbridge;
             init_editor_options(editor, qtbridge.mode, qtbridge.menuLang);
