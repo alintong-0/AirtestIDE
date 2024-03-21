@@ -1,6 +1,6 @@
 var editor = CodeMirror(document.body);
 var imgMarkerList = [];
-
+var debugWebSocket = null;
 function confirmDialog(cm, text, shortText, fs) {
     if (cm.openConfirm) {
         cm.openConfirm(text, fs)
@@ -11,13 +11,13 @@ function confirmDialog(cm, text, shortText, fs) {
     }
 }
 var doReplaceConfirm = "<div class='confirmInsertDiv'> Poco mode has changed. Do you want to insert poco init code at the current cursor position? <a class='dialogBtn'>Yes</a> <a class='dialogBtn'>No</a> </div>";
-$(function() {
+$(function () {
     CodeMirror.registerHelper("hint", "python", CodeMirror.pythonHint);
     var typingTimer;
     var doneTypingInterval = 200;
-    editor.on("keyup", function(cm, event) {
+    editor.on("keyup", function (cm, event) {
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(function() {
+        typingTimer = setTimeout(function () {
             doneTyping(cm, event)
         }, doneTypingInterval)
     });
@@ -58,7 +58,7 @@ $(function() {
             }
         }
     }
-    editor.removeLineError = function() {
+    editor.removeLineError = function () {
         var count = editor.lineCount();
         for (var i = 0; i < count; i++) {
             var lineInfo = editor.lineInfo(i);
@@ -68,7 +68,7 @@ $(function() {
             }
         }
     };
-    editor.removeLineRunning = function() {
+    editor.removeLineRunning = function () {
         var count = editor.lineCount();
         for (var i = 0; i < count; i++) {
             var lineInfo = editor.lineInfo(i);
@@ -78,7 +78,7 @@ $(function() {
             }
         }
     };
-    editor.addText = function(content, newline, pos) {
+    editor.addText = function (content, newline, pos) {
         editor.removeLineError();
         if (newline) {
             content += "\n"
@@ -101,11 +101,11 @@ $(function() {
         }
         editor.focus()
     };
-    editor.smartAddText = function(content, newline, where, forceInsert) {
+    editor.smartAddText = function (content, newline, where, forceInsert) {
         newline = (typeof newline !== "undefined") ? newline : true;
         forceInsert = (typeof forceInsert !== "undefined") ? forceInsert : false;
         editorText = editor.getDoc().getValue();
-        console.log("Nemo smartAddText",content,newline,where,forceInsert,editorText)
+        console.log("Nemo smartAddText", content, newline, where, forceInsert, editorText)
         if (!editorText.includes(content) || forceInsert) {
             editor.removeLineError();
             if (newline) {
@@ -115,7 +115,7 @@ $(function() {
                 editor.addText(content, newline, null)
             } else {
                 pos = 0;
-                lines = editor.doc.eachLine(function(line) {
+                lines = editor.doc.eachLine(function (line) {
                     if (editor.doc.lineInfo(line).text.includes(where)) {
                         pos = {
                             line: editor.doc.lineInfo(line).line + 1,
@@ -146,7 +146,7 @@ $(function() {
             }
         }
     };
-    editor.addTextWithImage = function(content, newline, pos) {
+    editor.addTextWithImage = function (content, newline, pos) {
         var cursorPos = editor.getCursor();
         editor.addText(content, newline, pos);
         var moa_regexp = /Template\(([\u4e00-\u9fa5\w\s\+\:\/\\\._-]*\.png)(.*?[\)|\]]){0,1}\)/g;
@@ -162,15 +162,15 @@ $(function() {
             var pos_start = editor.findPosH(cursorPos, match.index, "char");
             var moa_length = match[0].length;
             var pos_new_end = editor.findPosH(pos_start, moa_length, "char");
-            (function(pos_start, pos_end, img) {
-                setTimeout(function() {
+            (function (pos_start, pos_end, img) {
+                setTimeout(function () {
                     markCroppedImage(pos_start, pos_end, img)
                 }, 1)
             })(pos_start, pos_new_end, img);
             match = moa_regexp.exec(content)
         }
     };
-    editor.addTextWithImageTest = function(content, imageList, newline) {
+    editor.addTextWithImageTest = function (content, imageList, newline) {
         var cursorPos = editor.getCursor();
         editor.addText(content, newline, null);
         for (var i = 0; i < imageList.length; i++) {
@@ -183,14 +183,14 @@ $(function() {
             img.setAttribute("title", imageList[i][0]);
             img.setAttribute("data-start", pos_start);
             img.setAttribute("data-end", pos_end);
-            (function(pos_start, pos_end, img) {
-                setTimeout(function() {
+            (function (pos_start, pos_end, img) {
+                setTimeout(function () {
                     markCroppedImage(pos_start, pos_end, img)
                 }, 1)
             })(pos_start, pos_end, img)
         }
     };
-    editor.addTextWithLink = function(content, newline, pos) {
+    editor.addTextWithLink = function (content, newline, pos) {
         var cursorPos = editor.getCursor();
         editor.addText(content, newline, pos);
         var http_regexp = /\[([\u4e00-\u9fa5\w\s]*)\]\((http.*)\)/g;
@@ -201,7 +201,7 @@ $(function() {
             link.setAttribute("href", match[2]);
             link.setAttribute("class", "helpinfo");
             link.appendChild(link_name);
-            link.onclick = function() {
+            link.onclick = function () {
                 event.preventDefault();
                 qtbridge.openLink($(this).attr("href"));
                 return false
@@ -216,20 +216,20 @@ $(function() {
             match = http_regexp.exec(content)
         }
     };
-    editor.on("copy", function(ins, e) {
+    editor.on("copy", function (ins, e) {
         var text = ins.getSelection();
         if (text.indexOf("Template") !== -1) {
             qtbridge.copy(text)
         }
     });
-    editor.on("paste", function(ins, e) {
+    editor.on("paste", function (ins, e) {
         var text = e.clipboardData.getData("Text");
         if (text.indexOf("Template") !== -1) {
             e.preventDefault();
             qtbridge.paste(text)
         }
     });
-    editor.on("change", function(ins, e) {
+    editor.on("change", function (ins, e) {
         var content = ins.getDoc().getValue();
         qtbridge.content = content
     });
@@ -255,7 +255,7 @@ $(function() {
         }
 
         function add_comment(text, indent) {
-            if (typeof(indent) === "undefined") {
+            if (typeof (indent) === "undefined") {
                 indent = 0
             }
             var start = text.search(/\S|$/);
@@ -272,7 +272,7 @@ $(function() {
         var section_indent = undefined;
         for (var i = cursor_start.line; i <= cursor_end.line; i++) {
             var indent = cm.getLine(i).search(/\S|$/);
-            if (typeof(section_indent) === "undefined") {
+            if (typeof (section_indent) === "undefined") {
                 section_indent = indent
             } else {
                 if (indent < section_indent && indent >= 0) {
@@ -313,7 +313,7 @@ $(function() {
         })
     }
     editor.addKeyMap({
-        "Tab": function(cm) {
+        "Tab": function (cm) {
             if (cm.somethingSelected()) {
                 var sel = editor.getSelection("\n");
                 if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
@@ -327,13 +327,13 @@ $(function() {
                 cm.execCommand("insertSoftTab")
             }
         },
-        "Shift-Tab": function(cm) {
+        "Shift-Tab": function (cm) {
             cm.indentSelection("subtract")
         },
-        "Ctrl-/": function(cm) {
+        "Ctrl-/": function (cm) {
             cm.execCommand("toggleComment")
         },
-        "Cmd-/": function(cm) {
+        "Cmd-/": function (cm) {
             cm.execCommand("toggleComment")
         }
     });
@@ -370,19 +370,91 @@ $(function() {
             token: "variable-3"
         }]
     });
-    if (typeof(qt) !== "undefined") {
-        console.log("Nemo new QWebChannel")
-        new QWebChannel(qt.webChannelTransport, function(channel) {
+    if (typeof (qt) !== "undefined") {
+
+        new QWebChannel(qt.webChannelTransport, function (channel) {
             window.qtbridge = channel.objects.qtbridge;
             init_editor_options(editor, qtbridge.mode, qtbridge.menuLang);
             var fontSize = qtbridge.fontSize;
             $("body").css("fontSize", fontSize);
             editor.refresh();
             init_editor_bridge(qtbridge.mode);
+            console.log("Nemo new QWebChannel", qtbridge.mode)
+            if (qtbridge.mode == "EDITOR") {
+                const debugUrl = 'ws://localhost:9321'
+                const CodingRunningType = {
+                    EnterCode: 0,
+                };
+                function OpenDebugSocket() {
+                    // 创建 WebSocket 连接'
+                    debugWebSocket = new WebSocket(debugUrl);
+                    // 监听连接打开事件
+                    debugWebSocket.addEventListener('open', function (event) {
+                        onDebugOpen(event);
+                    });
+
+                    // 监听消息接收事件
+                    debugWebSocket.addEventListener('message', function (event) {
+                        onDebugMessage(event)
+
+                    });
+
+                    // 监听连接关闭事件
+                    debugWebSocket.addEventListener('close', function (event) {
+                        console.log('WebSocket 连接已关闭，尝试重新连接...', event);
+
+                        // 尝试重新连接
+                        setInterval(function () {
+                            debugWebSocket = new WebSocket(debugUrl);
+                        }, 1000); // 等待一秒后重新连接
+                    });
+                }
+
+                function onDebugOpen(event) {
+                    console.log('WebSocket 连接已打开');
+                    window.sendDebugMessage("Hello Server")
+                }
+
+                function onDebugClose(event) {
+                    console.log('WebSocket 连接已关闭');
+                }
+
+
+                function onDebugMessage(event) {
+                    let msgData = event.data;
+                    console.log('接收到服务器消息：', msgData);
+                    if (msgData.startsWith("{")) {
+                        msgData = JSON.parse(msgData)
+                    }
+                    if (msgData.type != undefined) {
+                        switch (msgData.type) {
+                            case CodingRunningType.EnterCode:
+                                editor.addText(msgData.codeStr)
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                function sendDebugMessage(message) {
+                    if (message && debugWebSocket) {
+                        debugWebSocket.send(message);
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+
+                window.sendDebugMessage = sendDebugMessage
+                OpenDebugSocket()
+            }
             qtbridge.registrationFinished()
         })
     }
-    editor.on("dblclick", function(ins, e) {
+    editor.on("dblclick", function (ins, e) {
         if (e.target) {
             var target = $(e.target);
             if (target.attr("class") === "imgClass") {
@@ -399,7 +471,7 @@ $(function() {
                     line: lineCh.line,
                     ch: line.length
                 };
-                var imgList = imgMarkerList.filter(function(img) {
+                var imgList = imgMarkerList.filter(function (img) {
                     return img.replacedWith == target.context
                 });
                 for (var i = 0; i < imgList.length; i++) {
