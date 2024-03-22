@@ -13,7 +13,7 @@ function toggleLanguage(e) {
     "zh_CN" == e ? ($(".en").hide(), $(".zh").show()) : ($(".zh").hide(), $(".en").show())
 }
 var contextMenuTypes = {
-        EDITOR: ["undo", "redo", "copy", "paste", "debug", "switch_mode"],
+        EDITOR: ["undo", "redo", "copy", "paste", "debug", "switch_mode","sep_0","split","sep_1","ui_func","process_control_func",],
         LOG: ["copy", "clear"]
     },
     contextMenuItems = {
@@ -104,5 +104,62 @@ var contextMenuTypes = {
             icon: function(e, t, n) {
                 return console.log("test", e, t, n), "code" !== $($(t).parent("ul").parent()[0]).find(".CodeMirror-wrap").data("templateMode") ? "context-menu-icon context-menu-icon-code" : "context-menu-icon context-menu-icon-template"
             }
-        }
+        },
+        sep_0: "---------",
+        sep_1: "---------",
+        split: {
+            name: '<span class="en">-----The line between Func-----</span><span class="zh">-----以下为Nemo自定义方法-----</span>',
+            callback: function() {
+                
+            },
+            isHtmlName: !0,
+            icon: ""
+        },
+        ui_func:{
+            name:'UI方法',
+            items:{
+                start_hide_top_ui:{
+                    name:'开始屏蔽顶层ui弹出',
+                    callback: function() {
+                
+                    },
+                    isHtmlName: !0,
+                    icon: ""
+                },
+                end_hide_top_ui:{
+                    name:'恢复顶层ui弹出',
+                    callback: function() {
+                
+                    },
+                    isHtmlName: !0,
+                    icon: ""
+                },
+            }
+        },
+        process_control_func:{
+            name:'流程控制方法',
+            items:{
+                code_func:{
+                    name:'流程控制代码模板',
+                    items:{
+                        code_func_if:{
+                            name:'条件判断',
+                            callback: function() {
+                        
+                            },
+                            isHtmlName: !0,
+                            icon: ""
+                        },
+                    }
+                },
+                code_special_func:{
+                    name:'拓展支持代码模板',
+                    callback: function() {
+                
+                    },
+                    isHtmlName: !0,
+                    icon: ""
+                },
+            }
+        },
     };

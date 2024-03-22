@@ -16,3 +16,6 @@ NetEase AirTestIDE1.2.17 Overwrite. For learning only. <br>
 >> * 添加代码窗口键入支持，游戏内开启WebSocketServer，默认端口9321，开启ide后代码窗口自动连接游戏内服务器 <br>
 >> * 后续根据自己项目需求使用poco的需求写对应的操作转代码的逻辑 <br>
 ![image text](https://github.com/alintong-0/AirtestIDE/blob/main/readMe/coding.gif) <br>
+> 拓展代码编辑器右键菜单
+>> 右键菜单使用的是jQuery-contextMenu，可以搜索相关文档对其进行拓展 <br>
+![image text](https://github.com/alintong-0/AirtestIDE/blob/main/readMe/right_click.png) <br>
