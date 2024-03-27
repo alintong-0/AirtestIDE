@@ -60,14 +60,20 @@
 <script src="codemirror/addon/fold/comment-fold.js"></script>
 <!-- 自定义mode -->
 <script src="codemirror/addon/mode/simple.js"></script>
-<script src="js/editor.js"></script>
-<script src="js/init_editor_channel.js"></script>
 
 <!-- contextmenu -->
 <script src="plugins/jquery-contextMenu/jquery.contextMenu.min.js"></script>
 <script src="plugins/jquery-contextMenu/jquery.ui.position.min.js"></script>
 <link rel="stylesheet" href="plugins/jquery-contextMenu/jquery.contextMenu.css">
 <script type="text/javascript" src="js/contextMenu.js" charset="utf-8"></script>
+
+<!-- 拓展func初始化 -->
+<script src="js/libs/require.js" data-main="js/jsInterface.js"></script>
+<!-- 这里走代码动态add进来方便添加事件回调 -->
+<!-- <script src="js/editor.js"></script>
+<script src="js/init_editor_channel.js"></script> -->
+
+
 
 <link rel="stylesheet" href="css/editor.css" />
 </body>

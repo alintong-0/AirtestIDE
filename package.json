@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "eslint": "^7.11.0",
+    "eslint-config-alloy": "^3.8.0",
+    "typescript": "^4.0.3",
+    "prettier": "3.2.5"
+  },
+"prettier": {
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 120,
+        "tabWidth": 4
+    }
+}

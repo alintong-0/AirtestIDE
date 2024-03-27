@@ -379,78 +379,15 @@ $(function () {
             $("body").css("fontSize", fontSize);
             editor.refresh();
             init_editor_bridge(qtbridge.mode);
-            console.log("Nemo new QWebChannel", qtbridge.mode)
-            if (qtbridge.mode == "EDITOR") {
-                const debugUrl = 'ws://localhost:9321'
-                const CodingRunningType = {
-                    EnterCode: 0,
-                };
-                function OpenDebugSocket() {
-                    // 创建 WebSocket 连接'
-                    debugWebSocket = new WebSocket(debugUrl);
-                    // 监听连接打开事件
-                    debugWebSocket.addEventListener('open', function (event) {
-                        onDebugOpen(event);
-                    });
-
-                    // 监听消息接收事件
-                    debugWebSocket.addEventListener('message', function (event) {
-                        onDebugMessage(event)
-
-                    });
-
-                    // 监听连接关闭事件
-                    debugWebSocket.addEventListener('close', function (event) {
-                        console.log('WebSocket 连接已关闭，尝试重新连接...', event);
-
-                        // 尝试重新连接
-                        setInterval(function () {
-                            debugWebSocket = new WebSocket(debugUrl);
-                        }, 1000); // 等待一秒后重新连接
-                    });
-                }
-
-                function onDebugOpen(event) {
-                    console.log('WebSocket 连接已打开');
-                    window.sendDebugMessage("Hello Server")
-                }
-
-                function onDebugClose(event) {
-                    console.log('WebSocket 连接已关闭');
-                }
-
-
-                function onDebugMessage(event) {
-                    let msgData = event.data;
-                    console.log('接收到服务器消息：', msgData);
-                    if (msgData.startsWith("{")) {
-                        msgData = JSON.parse(msgData)
-                    }
-                    if (msgData.type != undefined) {
-                        switch (msgData.type) {
-                            case CodingRunningType.EnterCode:
-                                editor.addText(msgData.codeStr)
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                }
-
-                function sendDebugMessage(message) {
-                    if (message && debugWebSocket) {
-                        debugWebSocket.send(message);
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-
-                window.sendDebugMessage = sendDebugMessage
-                OpenDebugSocket()
-            }
+            //定义窗口初始化成功事件
+            window.windowMode = qtbridge.mode
+            const windowModeInit = new Event("windowModeInit", {
+                bubbles: true, // 是否冒泡
+                cancelable: false // 是否可以取消
+            });
+            
+            // 在文档中触发该事件
+            window.document.dispatchEvent(windowModeInit);
             qtbridge.registrationFinished()
         })
     }

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2016" /* *** 默认 es3  版本有'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'  esnext为最新版本 */,
+    "module": "amd" /* *** 指定要使用的模块化的规范 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'esnext' */,
+    "outDir": "./app/widgets/text_editor/editor_html/output/js/" /* *** 用来指定编译后文件所在的目录 */,
+    //"outFile": "./dist/app.js",/* 将代码合并为指定的一个文件，所有的全局作用域中的代码会合并到一个文件中，含有导入的模块化的信息，要根据模块化的配置 */
+    "allowJs": true /* 是否对js文件进行编译，默认是false 即编译到dist目录下 */,
+    "checkJs": false /* 是否对js文件代码检查语法规范，默认是false */,
+    "removeComments": true /* 是否移除注释 默认false */,
+    "noEmit": false /* 不生成编译后的文件 默认false */,
+    "noEmitOnError": true /* 当有错误时， 不生成编译后的文件 */,
+    "strict": true /* 所有严格检查的总开关，打开后下面的可以不写了 */,
+    "alwaysStrict": false /* 用来设置编译后的文件是否使用严格模式，默认false，在有导入的文件中默认是使用严格模式的，即有import  。。。 */,
+    "noImplicitAny": false /* 不允许隐式的any类型 */,
+    "noImplicitThis": true /* 不允许不明确类型的this */,
+    "strictNullChecks": true /* 严格的检查空值 示例见app.ts 检查可能代码中可能含有空值的情况，进行报错*/
+  },
+  "include": ["exCode/**/*.ts"],
+  "exclude": []
+}
