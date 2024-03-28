@@ -11,15 +11,28 @@ export enum MenuItemType {
     select = 'select',
 }
 
+export type ContextMenuEventCallback = (key: string, options: any, event: MouseEvent) => void;
+
 export type EventsType = {
-    [eventName: string]: (data: any, options: any) => void
+    build?: (triggerElement: HTMLElement, e: MouseEvent) => void;
+    show?: (element: HTMLElement, e: MouseEvent) => void;
+    hide?: (element: HTMLElement, all: boolean) => void;
+    visible?: (element: HTMLElement, visible: boolean) => void;
+    itemClick?: ContextMenuEventCallback;
+    itemHover?: ContextMenuEventCallback;
+    itemMouseenter?: ContextMenuEventCallback;
+    itemMouseleave?: ContextMenuEventCallback;
+    keypress?: (element: HTMLElement, e: KeyboardEvent) => void;
+    keydown?: (element: HTMLElement, e: KeyboardEvent) => void;
+    keyup?: (element: HTMLElement, e: KeyboardEvent) => void;
+    input?: (element: HTMLElement, e: KeyboardEvent) => void;
 }
 
 export type RootContextMenuItems = Dictionary<string,MenuItem>
 
 export type MenuItem = {
     name: string // 菜单项显示的名称
-    callback?: () => void // 点击菜单项时触发的回调函数
+    callback?: (itemKey: string, opt: any, originalEvent: MouseEvent) => boolean // 点击菜单项时触发的回调函数
     className?: string // 菜单项的类名
     icon?: string // 菜单项的图标
     disabled?: boolean // 是否禁用菜单项
@@ -32,7 +45,7 @@ export type MenuItem = {
     options?: Dictionary<string, string> // 下拉列表的选项
     height?: string // 输入框的高度
     accesskey?: string // 菜单项的快捷键
-    items: Dictionary<string,MenuItem> // 子菜单项
+    items?: RootContextMenuItems // 子菜单项
 }
 
 export enum EditorMode {

@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "../exManager/exMsgMgr"], function (require, exports, exMsgMgr_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class exFuncBase {
@@ -6,6 +6,7 @@ define(["require", "exports"], function (require, exports) {
         get callback() {
             return () => {
                 console.log('This method is not implemented!', '此方法未实现!');
+                return true;
             };
         }
         get className() {
@@ -45,7 +46,16 @@ define(["require", "exports"], function (require, exports) {
             return '';
         }
         get items() {
-            return [];
+            return null;
+        }
+        sendMsg(msg) {
+            console.warn("sendMsg:", msg);
+            exMsgMgr_1.default.getInstance().sendMessage(msg);
+        }
+        cbDefaultFunction(itemKey, opt, originalEvent) {
+            return false;
+        }
+        eventsDefaultFunction(element, e) {
         }
     }
     exports.default = exFuncBase;

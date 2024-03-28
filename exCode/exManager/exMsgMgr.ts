@@ -74,7 +74,9 @@ export default class exMsgMgr extends exMgrBase {
         }
     }
 
-    public sendMessage() {}
+    public sendMessage(msg:string) {
+        console.log(msg)
+    }
     update(): void {
         if (this.retryList.length > 0) {
             this.retryList.forEach((index) => {

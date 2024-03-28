@@ -13,6 +13,7 @@ let global
     exMsgMgr.getInstance().init()
     global = window
     const callback = () => {
+        return
         console.log((window as any).windowMode, (window as any).exMsgMgr, window)
         ;(window as any).exMsgMgr.start((window as any).windowMode)
     }

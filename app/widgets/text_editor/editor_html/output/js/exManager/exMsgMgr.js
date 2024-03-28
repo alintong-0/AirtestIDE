@@ -59,7 +59,9 @@ define(["require", "exports", "../common/utils", "./exMgrBase"], function (requi
                 delete this.webSocketList[id];
             }
         }
-        sendMessage() { }
+        sendMessage(msg) {
+            console.log(msg);
+        }
         update() {
             if (this.retryList.length > 0) {
                 this.retryList.forEach((index) => {

@@ -13,6 +13,7 @@ define(["require", "exports", "./exManager/exFuncMgr", "./exManager/exMsgMgr"], 
         exMsgMgr_1.default.getInstance().init();
         global = window;
         const callback = () => {
+            return;
             console.log(window.windowMode, window.exMsgMgr, window);
             window.exMsgMgr.start(window.windowMode);
         };

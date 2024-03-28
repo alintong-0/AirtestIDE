@@ -74,14 +74,19 @@ define(["require", "exports", "../common/utils", "../exFunc/exFunctionInit", "./
                 options: cls.options,
                 height: cls.height,
                 accesskey: cls.accesskey,
-                items: {},
             };
-            if (clsInst.children.length > 0) {
-                for (let index = 0; index < clsInst.children.length; index++) {
-                    const child = clsInst.children[index];
-                    const tempItem = this.foreachBuildMenuItem(child);
-                    const key = Object.keys(tempItem)[0];
-                    nowMenuItem.items[key] = tempItem[key];
+            if (cls.items) {
+                nowMenuItem.items = cls.items;
+            }
+            else {
+                if (clsInst.children.length > 0) {
+                    nowMenuItem.items = {};
+                    for (let index = 0; index < clsInst.children.length; index++) {
+                        const child = clsInst.children[index];
+                        const tempItem = this.foreachBuildMenuItem(child);
+                        const key = Object.keys(tempItem)[0];
+                        nowMenuItem.items[key] = tempItem[key];
+                    }
                 }
             }
             const returnObj = {};
