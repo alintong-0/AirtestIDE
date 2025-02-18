@@ -1,4 +1,4 @@
-define(["require", "exports", "../common/utils", "./exMgrBase"], function (require, exports, utils_1, exMgrBase_1) {
+define(["require", "exports", "../common/utils", "./exMgrBase", "./messageHandlers/codeHandler"], function (require, exports, utils_1, exMgrBase_1, codeHandler_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class exMsgMgr extends exMgrBase_1.default {
@@ -8,6 +8,7 @@ define(["require", "exports", "../common/utils", "./exMgrBase"], function (requi
             this.webSocketList = {};
             this.webSocketIndex = 0;
             this.retryList = [];
+            this.codeHandlers = new Map();
         }
         init() { }
         start(editorMode) {
@@ -48,7 +49,15 @@ define(["require", "exports", "../common/utils", "./exMgrBase"], function (requi
             return index;
         }
         onOpen(id, event) { }
-        onMessage(id, event) { }
+        onMessage(id, event) {
+            var _a;
+            if (this.codeHandlers.has(id)) {
+                (_a = this.codeHandlers.get(id)) === null || _a === void 0 ? void 0 : _a.onMessage(event);
+            }
+            else {
+                this.codeHandlers.set(id, new codeHandler_1.default(id));
+            }
+        }
         onClose(id, event) {
             if (this.webSocketList[id].isRetry) {
                 console.log('WebSocket 连接已关闭，进入重试队列...', id, event);

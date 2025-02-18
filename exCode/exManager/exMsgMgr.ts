@@ -1,5 +1,12 @@
+/*
+ * @Description: 
+ * @Author: alintong
+ * @Date: 2024-03-26 16:13:25
+ * @LastEditors: alintong
+ */
 import { DEBUG_URL, Dictionary, EditorMode } from '../common/utils'
 import exMgrBase from './exMgrBase'
+import codeHandler from './messageHandlers/codeHandler'
 
 type webSocketItem = {
     ws: WebSocket
@@ -13,7 +20,8 @@ export default class exMsgMgr extends exMgrBase {
     private readonly webSocketList: Dictionary<number, webSocketItem> = {}
     private webSocketIndex = 0
     private retryList: number[] = []
-    public init() {}
+    private codeHandlers: Map<number, codeHandler> = new Map()
+    public init() { }
 
     public start(editorMode: EditorMode) {
         switch (editorMode) {
@@ -60,9 +68,16 @@ export default class exMsgMgr extends exMgrBase {
         return index
     }
 
-    public onOpen(id: number, event: Event) {}
+    public onOpen(id: number, event: Event) { }
 
-    public onMessage(id: number, event: MessageEvent<any>) {}
+    public onMessage(id: number, event: MessageEvent<any>) {
+        if (this.codeHandlers.has(id)) {
+            this.codeHandlers.get(id)?.onMessage(event)
+        }
+        else {
+            this.codeHandlers.set(id, new codeHandler(id))
+        }
+    }
 
     public onClose(id: number, event: CloseEvent) {
         if (this.webSocketList[id].isRetry) {
@@ -74,7 +89,7 @@ export default class exMsgMgr extends exMgrBase {
         }
     }
 
-    public sendMessage(msg:string) {
+    public sendMessage(msg: string) {
         console.log(msg)
     }
     update(): void {
