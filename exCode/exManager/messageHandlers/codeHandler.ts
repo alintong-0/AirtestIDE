@@ -23,7 +23,9 @@ export default class codeHandler {
         if (msgData.type != undefined) {
             switch (msgData.type) {
                 case CodingRunningType.EnterCode:
-                    (window as any).editorInstance.addText(msgData.codeStr)
+                    if ((window as any).exMsgMgr && (window as any).exMsgMgr.isRecording) {
+                        ; (window as any).editorInstance.addText(msgData.codeStr)
+                    }
                     break;
 
                 default:

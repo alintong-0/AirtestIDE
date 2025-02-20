@@ -5,6 +5,7 @@ define(["require", "exports", "../common/utils", "./exMgrBase", "./messageHandle
         constructor() {
             super(...arguments);
             this.waitForSocketReady = false;
+            this.isRecording = false;
             this.webSocketList = {};
             this.webSocketIndex = 0;
             this.retryList = [];

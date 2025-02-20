@@ -18,7 +18,10 @@ define(["require", "exports"], function (require, exports) {
             if (msgData.type != undefined) {
                 switch (msgData.type) {
                     case CodingRunningType.EnterCode:
-                        window.editorInstance.addText(msgData.codeStr);
+                        if (window.exMsgMgr && window.exMsgMgr.isRecording) {
+                            ;
+                            window.editorInstance.addText(msgData.codeStr);
+                        }
                         break;
                     default:
                         break;

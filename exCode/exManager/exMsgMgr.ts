@@ -17,6 +17,7 @@ type webSocketItem = {
 
 export default class exMsgMgr extends exMgrBase {
     public waitForSocketReady = false
+    public isRecording = false
     private readonly webSocketList: Dictionary<number, webSocketItem> = {}
     private webSocketIndex = 0
     private retryList: number[] = []
